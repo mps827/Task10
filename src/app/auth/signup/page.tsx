@@ -1,38 +1,163 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import styles from "../style/index.module.css";
 import { useState } from "react";
-import baseRepository from "@/baseRepository/base";
+import { useRouter } from "next/navigation";
+import authRepository, { SignupBody } from "@/baseRepository/auth";
+import { toast } from "react-toastify";
 
-const Signup = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
+const Signup: React.FC = () => {
+  const router = useRouter();
+  // const [firstName, setFirstName] = useState("");
+  // const [lastName, setLastName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [nationalCode, setNationalCode] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  const [formData, setFormData] = useState<SignupBody>({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    nationalCode: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const registerHandler = async (event: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+    // const { name, value } = e.target;
+    // if (name === "phoneNumber") {
+    //   setPhoneNumber(value);
+    // } else if (name === "password") {
+    //   setPassword(value);
+    // } else if (name === "confirmPassword") {
+    //   setConfirmPassword(value);
+    // } else if (name === "firstName") {
+    //   setFirstName(value);
+    // } else if (name === "lastName") {
+    //   setLastName(value);
+    // } else if (name === "nationalCode") {
+    //   setNationalCode(value);
+    // } else if (name === "email") {
+    //   setEmail(value);
+    // }
+  };
+
+  const registerHandler = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const res = await baseRepository.post("./signup", {
-      phoneNumber,
-      password,
-    });
-    console.log(res);
-
-    if (res.status == 200) {
-      alert("successful Registered");
+    if (
+      !formData.email ||
+      !formData.lastName ||
+      !formData.firstName ||
+      !formData.nationalCode ||
+      !formData.password ||
+      !formData.phoneNumber ||
+      !formData.confirmPassword
+    ) {
+      toast.error("یک یا چند فیلد خالی است");
+      return;
     }
+
+    authRepository
+      .Signup(formData)
+      .then((res) => {
+        const message = res.data.message;
+
+        switch (message) {
+          case "User created successfully":
+            toast.success(
+              "ثبت نام با موفقیت انجام شد! به صفحه منتقل می شوید.",
+              {
+                autoClose: 3500,
+              }
+            );
+            setTimeout(() => {
+              router.push("/login");
+            }, 3000);
+            break;
+
+          case "User with this phone number, national code, or email address already exists":
+            toast.error(
+              "حساب کاربری با این شماره موبایل ، کد ملی یا ایمیل از قبل وجود دارد !",
+              {
+                autoClose: 5000,
+              }
+            );
+            break;
+
+          case "National code must be a 10-digit number":
+            toast.error("فرمت کد ملی نادرست است !", { autoClose: 4000 });
+            break;
+
+          case "Phone number must be an 11-digit number starting with 09":
+            toast.error(
+              "فرمت شماره تلفن غلط است.\n شماره تلفن باید یک عدد ۱۱ رقمی و شروع آن با ۰۹ باشد"
+            );
+            break;
+
+          case "All fields are required":
+            toast.error("وارد کردن تمام فیلد ها اجباری است");
+            break;
+
+          default:
+            toast.error("خطای ناشناخته رخ داده است.");
+            break;
+        }
+      })
+      .catch((error) => {
+        toast.error("ثبت نام با خطا مواجه شد. لطفا دوباره تلاش کنید.");
+      });
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return; // جلوگیری از ادامه فرآیند اگر رمزها یکسان نباشند
+    }
+
+    //   console.log(res);
+
+    //   if (res.status === 200) {
+    //     alert("Successfully Registered");
+    //     router.push("/auth/login");
+    //   }
+    // })
+    // .catch((error) => {
+    //   // نوع‌دهی صریح به error
+    //   if (axios.isAxiosError(error)) {
+    //     console.error(
+    //       "Axios error during registration:",
+    //       error.response?.data
+    //     );
+    //     alert(
+    //       "Registration failed: " +
+    //         (error.response?.data?.message || "Please try again.")
+    //     );
+    //   } else {
+    //     console.error("Unexpected error:", error);
+    //     alert("An unexpected error occurred. Please try again.");
+    //   }
+    // });
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.txtHeader}>SignUp</h1>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={registerHandler}>
         <label className={styles.txt}>First Name</label>
         <input
           className={styles.txt}
           type="text"
           name="firstName"
           placeholder="firstName"
+          value={formData.firstName}
+          onChange={handleChange}
           required
         />
 
@@ -42,26 +167,30 @@ const Signup = () => {
           type="text"
           name="lastName"
           placeholder="lastName"
+          value={formData.lastName}
+          onChange={handleChange}
           required
         />
 
         <label className={styles.txt}>National code</label>
         <input
           className={styles.txt}
-          type="text"
+          type="number"
           name="nationalCode"
           placeholder="nationalCode"
+          value={formData.nationalCode}
+          onChange={handleChange}
           required
         />
 
         <label className={styles.txt}>Phone Number</label>
         <input
           className={styles.txt}
-          type="text"
+          type="number"
           name="phoneNumber"
           placeholder="phoneNumber"
-          value={phoneNumber}
-          onChange={(event) => setPhoneNumber(event.target.value)}
+          value={formData.phoneNumber}
+          onChange={handleChange}
           required
         />
 
@@ -71,6 +200,8 @@ const Signup = () => {
           type="email"
           name="email"
           placeholder="email"
+          value={formData.email}
+          onChange={handleChange}
           required
         />
 
@@ -80,14 +211,23 @@ const Signup = () => {
           type="password"
           name="password"
           placeholder="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          value={formData.password}
+          onChange={handleChange}
           required
         />
 
-        <button type="submit" onClick={registerHandler}>
-          Register
-        </button>
+        <label className={styles.txt}>Confirm Password</label>
+        <input
+          className={styles.txt}
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit">Register</button>
       </form>
       <p>
         Already Registred? <Link href="/auth/login"> Login</Link>
@@ -97,3 +237,7 @@ const Signup = () => {
 };
 
 export default Signup;
+
+// authRepository.Signup().then((response) => {
+//   const message = response.data.message;
+// });

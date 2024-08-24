@@ -1,12 +1,13 @@
 import baseRepository from "./base";
 
 export interface SignupBody {
-  name: string;
-  family: string;
-  phoneNumber: string;
+  firstName: string;
+  lastName: string;
   nationalCode: string;
-  emailAddress: string;
+  phoneNumber: string;
+  email: string;
   password: string;
+  confirmPassword: string;
 }
 export interface LoginBody {
   phoneNumber: string;
@@ -20,11 +21,11 @@ const authRepository = {
   Login(body: LoginBody) {
     return baseRepository.post("/login", body);
   },
-  Logout() {
-    if (global?.window !== undefined) {
-      localStorage.removeItem("access_token");
-    }
-  },
 };
 
 export default authRepository;
+
+// Logout() {
+//   if (global?.window !== undefined) {
+//     localStorage.removeItem("access_token");
+//   }

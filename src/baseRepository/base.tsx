@@ -3,8 +3,13 @@ import axios from "axios";
 const baseRepository = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: {
-    "Content-Type": "aplication/json",
-    Auth: "Bearer Token",
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+    "Access-Control-Allow-Origin": "*",
+  },
+  validateStatus(status) {
+    return status < 500;
   },
 });
 

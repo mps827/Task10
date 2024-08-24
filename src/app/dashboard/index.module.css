@@ -1,0 +1,25 @@
+/* index.module.css */
+
+.container {
+  text-align: center;
+  padding: 20px;
+}
+
+.txt {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #005bb5;
+}
