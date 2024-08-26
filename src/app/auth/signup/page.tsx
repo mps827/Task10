@@ -10,13 +10,6 @@ import { toast } from "react-toastify";
 
 const Signup: React.FC = () => {
   const router = useRouter();
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [nationalCode, setNationalCode] = useState("");
-  // const [phoneNumber, setPhoneNumber] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
   const [formData, setFormData] = useState<SignupBody>({
     firstName: "",
     lastName: "",
@@ -32,26 +25,10 @@ const Signup: React.FC = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    // const { name, value } = e.target;
-    // if (name === "phoneNumber") {
-    //   setPhoneNumber(value);
-    // } else if (name === "password") {
-    //   setPassword(value);
-    // } else if (name === "confirmPassword") {
-    //   setConfirmPassword(value);
-    // } else if (name === "firstName") {
-    //   setFirstName(value);
-    // } else if (name === "lastName") {
-    //   setLastName(value);
-    // } else if (name === "nationalCode") {
-    //   setNationalCode(value);
-    // } else if (name === "email") {
-    //   setEmail(value);
-    // }
   };
 
-  const registerHandler = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const registerHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     if (
       !formData.email ||
@@ -120,30 +97,6 @@ const Signup: React.FC = () => {
       alert("Passwords do not match!");
       return; // جلوگیری از ادامه فرآیند اگر رمزها یکسان نباشند
     }
-
-    //   console.log(res);
-
-    //   if (res.status === 200) {
-    //     alert("Successfully Registered");
-    //     router.push("/auth/login");
-    //   }
-    // })
-    // .catch((error) => {
-    //   // نوع‌دهی صریح به error
-    //   if (axios.isAxiosError(error)) {
-    //     console.error(
-    //       "Axios error during registration:",
-    //       error.response?.data
-    //     );
-    //     alert(
-    //       "Registration failed: " +
-    //         (error.response?.data?.message || "Please try again.")
-    //     );
-    //   } else {
-    //     console.error("Unexpected error:", error);
-    //     alert("An unexpected error occurred. Please try again.");
-    //   }
-    // });
   };
 
   return (
@@ -155,6 +108,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="text"
           name="firstName"
+          id="firstName"
           placeholder="firstName"
           value={formData.firstName}
           onChange={handleChange}
@@ -166,6 +120,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="text"
           name="lastName"
+          id="lastName"
           placeholder="lastName"
           value={formData.lastName}
           onChange={handleChange}
@@ -177,6 +132,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="number"
           name="nationalCode"
+          id="nationalCode"
           placeholder="nationalCode"
           value={formData.nationalCode}
           onChange={handleChange}
@@ -188,6 +144,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="number"
           name="phoneNumber"
+          id="phoneNumber"
           placeholder="phoneNumber"
           value={formData.phoneNumber}
           onChange={handleChange}
@@ -199,6 +156,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="email"
           name="email"
+          id="email"
           placeholder="email"
           value={formData.email}
           onChange={handleChange}
@@ -210,6 +168,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="password"
           name="password"
+          id="password"
           placeholder="password"
           value={formData.password}
           onChange={handleChange}
@@ -221,6 +180,7 @@ const Signup: React.FC = () => {
           className={styles.txt}
           type="password"
           name="confirmPassword"
+          id="confirmPassword"
           placeholder="Confirm password"
           value={formData.confirmPassword}
           onChange={handleChange}
