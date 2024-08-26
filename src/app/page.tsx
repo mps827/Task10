@@ -1,5 +1,5 @@
 "use client";
-require("dotenv").config();
+// require("dotenv").config();
 import Link from "next/link";
 import styles from "./Styles/index.module.css";
 

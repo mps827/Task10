@@ -2,7 +2,6 @@
 
 .container {
   text-align: center;
-  padding: 20px;
 }
 
 .txt {
@@ -22,12 +21,4 @@
 
 .btn:hover {
   background-color: #005bb5;
-}
-
-
-.box {
-  /* padding: 20px; */
-  text-align: center;
-  margin-top: 10px;
-  border: 2px solid black;
 }

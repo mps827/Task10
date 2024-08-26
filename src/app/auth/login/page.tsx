@@ -2,16 +2,16 @@
 import React from "react";
 import { useState } from "react";
 import styles from "../style/index.module.css";
-import useRouter from "next/router";
+import { useRouter } from "next/navigation";
 import authRepository, { LoginBody } from "@/baseRepository/auth";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState<LoginBody>({
     phoneNumber: "",
     password: "",
   });
-  const router = useRouter;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -29,13 +29,11 @@ const Login = () => {
         const { token, message } = response.data;
 
         if (token) {
-          if (global?.window !== undefined) {
-            localStorage.setItem("access_token", token);
-          }
+          localStorage.setItem("access_tken", token);
           toast.success("ورود موفقیت آمیز بود !");
 
           setTimeout(() => {
-            router.push("../../dashboard");
+            router.push("/dashboard");
           }, 2000);
           return;
         }

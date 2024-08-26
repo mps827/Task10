@@ -1,11 +1,11 @@
 import baseRepository from "./base";
 
 export interface SignupBody {
-  firstName: string;
-  lastName: string;
+  name: string;
+  family: string;
   nationalCode: string;
   phoneNumber: string;
-  email: string;
+  emailAddress: string;
   password: string;
   confirmPassword: string;
 }

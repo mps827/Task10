@@ -1,19 +1,20 @@
 import React from "react";
+import style from "./index.module.css";
 
 interface BaseListTileProps {
-  firstName: string;
-  lastName: string;
+  name: string;
+  family: string;
   phoneNumber: string;
 }
 
 const BaseListTile: React.FC<BaseListTileProps> = (props) => {
   return (
-    <div className="">
-      <div className="">
-        <div className="">{props.firstName}</div>
-        <div className="">{props.lastName}</div>
+    <div>
+      <div className={style.container}>
+        <div className={style.txt}>{props.name}</div>
+        <div className={style.txt}>{props.family}</div>
       </div>
-      <div className="">{props.phoneNumber}</div>
+      <div className={style.txt}>{props.phoneNumber}</div>
     </div>
   );
 };

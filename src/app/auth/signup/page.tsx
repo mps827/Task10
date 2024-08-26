@@ -7,18 +7,24 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import authRepository, { SignupBody } from "@/baseRepository/auth";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup: React.FC = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<SignupBody>({
-    firstName: "",
-    lastName: "",
+    name: "",
+    family: "",
     phoneNumber: "",
     nationalCode: "",
-    email: "",
+    emailAddress: "",
     password: "",
     confirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -31,9 +37,9 @@ const Signup: React.FC = () => {
     e.preventDefault();
 
     if (
-      !formData.email ||
-      !formData.lastName ||
-      !formData.firstName ||
+      !formData.emailAddress ||
+      !formData.family ||
+      !formData.name ||
       !formData.nationalCode ||
       !formData.password ||
       !formData.phoneNumber ||
@@ -57,11 +63,11 @@ const Signup: React.FC = () => {
               }
             );
             setTimeout(() => {
-              router.push("/login");
+              router.push("/auth/login");
             }, 3000);
             break;
 
-          case "User with this phone number, national code, or email address already exists":
+          case "User with this phone number, national code, or emailAddress address already exists":
             toast.error(
               "حساب کاربری با این شماره موبایل ، کد ملی یا ایمیل از قبل وجود دارد !",
               {
@@ -107,10 +113,10 @@ const Signup: React.FC = () => {
         <input
           className={styles.txt}
           type="text"
-          name="firstName"
-          id="firstName"
-          placeholder="firstName"
-          value={formData.firstName}
+          name="name"
+          id="name"
+          placeholder="name"
+          value={formData.name}
           onChange={handleChange}
           required
         />
@@ -119,10 +125,10 @@ const Signup: React.FC = () => {
         <input
           className={styles.txt}
           type="text"
-          name="lastName"
-          id="lastName"
-          placeholder="lastName"
-          value={formData.lastName}
+          name="family"
+          id="family"
+          placeholder="family"
+          value={formData.family}
           onChange={handleChange}
           required
         />
@@ -151,29 +157,44 @@ const Signup: React.FC = () => {
           required
         />
 
-        <label className={styles.txt}>Email</label>
+        <label className={styles.txt}>emailAddress</label>
         <input
           className={styles.txt}
-          type="email"
-          name="email"
-          id="email"
-          placeholder="email"
-          value={formData.email}
+          type="emailAddress"
+          name="emailAddress"
+          id="emailAddress"
+          placeholder="emailAddress"
+          value={formData.emailAddress}
           onChange={handleChange}
           required
         />
 
-        <label className={styles.txt}>Password</label>
-        <input
-          className={styles.txt}
-          type="password"
-          name="password"
-          id="password"
-          placeholder="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div style={{ position: "relative" }}>
+          <label className={styles.txt}>Password</label>
+          <input
+            className={styles.txt}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            id="password"
+            placeholder="password"
+            value={formData.password}
+            onChange={handleChange}
+            style={{ paddingRight: "10px" }}
+            required
+          />
+          <span
+            onClick={togglePasswordVisibility}
+            style={{
+              position: "absolute",
+              right: "10px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+            }}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
 
         <label className={styles.txt}>Confirm Password</label>
         <input
